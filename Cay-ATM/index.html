@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="javascrip.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+        <h1>CÂY ATM</h1>
+        <br>
+        <input placeholder="Nhập số thẻ" id="soThe" type="text"/>
+        <input placeholder="Nhập mã PIN" id="PINLogin" type="text"/>
+        <br>
+        <p id="detailt"></p>
+        <button onclick="alertInfo()">Đăng nhập</button>
+        <br>
+        <h1>Các tính năng của cây ATM</h1>
+        <h3>1.Chuyển tiền</h3>
+        <input placeholder="Tài khoản muốn chuyển" id="tkChuyenTien" type="text" />
+        <input placeholder="Số tiền muốn chuyển" id="chuyenTien" type="text"/>
+        <button onclick="sendMoney()">Chuyển tiền</button>
+         <br>
+         <h3>2.Rút tiền</h3>
+         <br>
+         <input placeholder="Số tiền muốn rút" id="rutTien" type="text"/>
+         <input placeholder="Nhập mã PIN" id="PINRutTien" type="text"/>
+         <button onclick="withdrawMoney()">Rút tiền</button>
+         <br>
+         <h3>3.Đổi mã PIN</h3>
+         <br>
+         <input placeholder="Nhập mã PIN cũ" id="PINcu" type="text"/>
+         <input placeholder="Nhập mã PIN mới" id="newPIN1" type="text"/>
+         <input placeholder="Nhập lại mã PIN mới" id="newPIN2" type="text"/>
+         <button onclick="doiMaPINatm()">Đổi PIN</button>
+         <br>
+         <h3>4.Lịch sử giao dịch</h3>
+         <table id="myTable">
+             <tr>
+                 <th>STT</th>
+                 <th>Số tiền giao dịch</th>
+                 <th>Loại giao dịch</th>
+                 <th>STK người nhận</th>
+                 <th>Thời gian</th>
+             </tr>
+         </table>
+    </div>
+    
+</body>
+</html>

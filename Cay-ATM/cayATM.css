@@ -1,0 +1,34 @@
+
+ table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+        
+th {
+    border: 1px solid #dddddd;
+    text-align: center;
+     padding: 8px;
+}      
+td {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+.div{
+    border: 1px solid;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+.mathe {
+    color: red;
+}
+.mapin{
+    color: red;
+}
+.dntc{
+    color:blue;
+}

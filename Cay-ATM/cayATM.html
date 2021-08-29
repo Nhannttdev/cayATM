@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="cayATM.css">
+    <script src="cayATM.js" defer></script>
+
+</head>
+<body>
+    <div class="div" >
+        <h3> Chọn cây ATM muốn thực hiện</h3>
+        <input placeholder="Chọn cây ATM" id="choseAtmId" type="text"/>
+        <h1> Cây ATM </h1>
+            <input type="text" id="cardLogin" placeholder="Nhập số thẻ"/>
+            <input type="text" id="PINlogin" placeholder="Nhập mã PIN"/>
+        <br>
+        <br>
+            <span id="cardInfo" class="dntc"></span>
+            <!-- <span id="mathe" class="mathe"></span>
+            <span id="mapin" class="mapin"></span> -->
+             <p id="tenThe"></p> 
+            Số tiền:  <p id="soTien"></p>
+        <button onclick="dangNhap()">Đăng nhập</button>
+        <h1> Các tính năng của cây ATM</h1>
+        <h3>1. Chuyển tiền</h3>
+            <input type="text" id="amount" placeholder="Số tiền muốn chuyển"/>
+            <input type="text" id="receiver"  placeholder="Tài khoản muốn chuyển"/>
+            <button onclick="">Chuyển tiền</button>
+        <h3>2. Rút tiền</h3>
+            <input type="text" placeholder="Số tiền muốn rút"/>
+            <input type="text" placeholder="Nhập mã PIN"/>
+            <button onclick="">Rút tiền </button>
+        <h3>3. Đổi mã PIN</h3>
+            <input type="text" placeholder="Mã PIN cũ"/>
+            <input type="text" placeholder="Mã PIN mới"/>
+            <input type="text" placeholder="Nhập lại mã PIN mới"/>
+            <button onclick="">Đổi mã PIN</button>
+        <h3>4. Lịch sử giao dịch</h3>
+            <table>
+                <tr>
+                    <th>STT</th>
+                    <th>Số tiền giao dịch</th>
+                    <th>Loại giao dịch</th>
+                    <th>Người nhận</th>
+                    <th>Thời gian</th>
+                    <th>Nơi thực hiện</th>    
+                </tr>
+            <tr>
+                <td>1</td>
+                <td>500.000 VNĐ</td>
+                <td>Rút tiền</td>
+                <td></td>
+                <td>10.31 02/09/2021</td>
+                <td> ATM Hồ Gươm</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>1.000.000 VNĐ</td>
+                <td>Chuyển tiền</td>
+                <td>Nguyen Nhan - 0125896134 </td>
+                <td>10.31 02/09/2021</td>
+                <td> ATM Hồ Gươm</td>
+            </tr>
+            </table>
+    </div>
+    
+</body>    
+</html>    
