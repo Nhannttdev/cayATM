@@ -70,21 +70,19 @@ class ATM {
 
     widthDrawMoney(pin, amountToWidthDraw) {
         return new Promise((resolve, reject) => {
-                if (pin == currentPIN && amountToWidthDraw <= currentAmount) {
-                    console.log("tien hien tai",currentAmount );
-                    return resolve(true)
-                }
+            if (pin == currentPIN && amountToWidthDraw <= currentAmount) {
+                console.log("tien hien tai", currentAmount);
+                return resolve(true)
+            }
             return reject(null)
         })
     }
 
-    changePIN(cardNumber, oldIN, newPIN) {
+    changePIN(oldPIN, newPIN) {
         return new Promise((resolve, reject) => {
-                
-                if (currentPIN == oldPIN && currentPIN != newPIN) {
-                    return resolve(currentCreditCard)
-                }
-          
+            if (currentPIN == oldPIN && currentPIN != newPIN) {
+                return resolve(true)
+            }
             return reject(null)
         })
     }
@@ -172,7 +170,7 @@ function login() {
             if (isUserCardValid && isUserCardPINValid) {
 
                 currentATM.login(creditCards, userCardNumber, userCardPIN).then(result => {
-                    console.log("eeeee",result);
+                    console.log("eeeee", result);
                     currentLoginCardNumber = userCardNumber
                     currentPIN = result.PIN
                     persons.forEach(currentPerson => {
@@ -215,7 +213,7 @@ function transferMoney() {
                         currentReceiverCardNumber = cardReceiver
                         alert("Giao dịch thành công!")
                         currentAmount = currentAmount - amountToSend
-                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " +  currentAmount
+                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " + currentAmount
 
                     }).catch(errorTranfer => {
                         alert("Tài khoản của bạn không đủ để thực hiện giao dịch này!")
@@ -240,14 +238,14 @@ function widthDrawMoney() {
 
                 let isAmountToWidthDrawValid = currentATM.isAmountValid(amountToWidthDraw)
                 let isPINValid = currentATM.isPINValid(pin)
-               
+
                 if (isAmountToWidthDrawValid && isPINValid) {
-                   
-                    currentATM.widthDrawMoney( pin, amountToWidthDraw).then(resultWidthDraw => {
+
+                    currentATM.widthDrawMoney(pin, amountToWidthDraw).then(resultWidthDraw => {
                         alert("Rút tiền thành công!")
                         currentAmount = currentAmount - amountToWidthDraw
-                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " +  currentAmount
-                       
+                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " + currentAmount
+
                     }).catch(err => {
                         alert("Tài khoản của bạn không đủ!")
                     })
@@ -264,17 +262,17 @@ function changePIN() {
     atms.forEach(currentATM => {
         if (currentATM.code == chosenATMCode) {
             if (currentLoginCardNumber != undefined) {
-                let oldPinValid = document.getElementById("oldPin")
-                let newPinValid = document.getElementById("newPin")
-                let reNewPinValid = document.getElementById("reNewPin")
+                let oldPin = document.getElementById("oldPin")
+                let newPin = document.getElementById("newPin")
+                let reNewPin = document.getElementById("reNewPin")
 
-                let isOldPinValid = currentATM.isPINValid(oldPinValid)
-                let isNewPinValid = currentATM.isPINValid(newPinValid)
-                let isReNewPinValid = currentATM.isPINValid(reNewPinValid)
-                console.log("doi pin",isOldPinValid,isNewPinValid,isReNewPinValid);
+                // let isOldPinValid = currentATM.isPINValid(oldPin)
+                let isNewPinValid = currentATM.isPINValid(newPin)
+                let isReNewPinValid = currentATM.isPINValid(reNewPin)
+                console.log("doi pin", oldPin, isNewPinValid, isReNewPinValid);
 
-                if (isOldPinValid, isNewPinValid, isReNewPinValid) {
-                    currentATM.changePIN(cardNumber, oldIN, newPIN).then(resultPin => {
+                if (oldPin, isNewPinValid, isReNewPinValid) {
+                    currentATM.changePIN(oldPIN, newPIN).then(resultPin => {
                         currentPIN = newPIN
                         alert("Đổi mã pin thành công!")
                     }).catch(errorPin => {
