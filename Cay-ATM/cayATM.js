@@ -20,53 +20,78 @@ class ATM {
         this.address = address
         this.bankCode = bankCode
     }
-    login(creditCards, cardNumber, PIN, name){
-        creditCards.forEach(currentCreditCard => {
-            if (currentCreditCard.number == cardNmuber && currentCreditCard.PIN == PIN)
-                return true
-            else {
-                return false 
-            }
+    login(creditCards, cardNumber, PIN) {
+        return new Promise((resolve, reject) => {
+            creditCards.forEach(currentCreditCard => {
+                if (currentCreditCard.number == cardNumber && currentCreditCard.PIN == PIN) {
+                    return resolve(currentCreditCard)
+                }
+            })
+            return reject(null)
         })
     }
-    isCardNumberValid(cardNumber){
-        if (cardNumber.length == 13){
-            return true
-        }
-        return false  
-    }
-    isPINValid(PIN){
-        if (PIN.length == 6){
+    isCardNumberValid(cardNumber) {
+        if (cardNumber.length == 13) {
             return true
         }
         return false
     }
-    tranferMoney( cardNumberReceiver, amount){
-        
+    isPINValid(PIN) {
+        if (PIN.length == 6) {
+            return true
+        }
+        return false
     }
-    isCardNumberReceiverValid (creditCardNumberReceiver) {
+    tranferMoney(creditCards, cardNumberReceiver, amountToSend) {
+        return new Promise((resolve, reject) => {
+            creditCards.forEach(currentReceiverCreditCard => {
+                console.log("ngoai ham");
+                if (currentReceiverCreditCard.number == cardNumberReceiver && amountToSend <= currentAmount) {
+                    console.log("trong ham");
+                    return resolve(true)
+                }
+            })
+            return reject(null)
+        })
+    }
+    isCardNumberReceiverValid(creditCardNumberReceiver) {
         if (creditCardNumberReceiver.length == 13) {
             return true
         }
         return false
     }
-    isAmoutValid(amount){
-        if(amount > 0){
+    isAmountValid(amount) {
+        let amountValue = parseInt(amount)
+        if (amountValue >= 0) {
             return true
         }
         return false
     }
 
-    widthDrawMoney(cardNumber, amount){
-
+    widthDrawMoney(pin, amountToWidthDraw) {
+        return new Promise((resolve, reject) => {
+                if (pin == currentPIN && amountToWidthDraw <= currentAmount) {
+                    console.log("tien hien tai",currentAmount );
+                    return resolve(true)
+                }
+            return reject(null)
+        })
     }
-    changePIN(cardNumber, oldIN, newPIN){
 
+    changePIN(cardNumber, oldIN, newPIN) {
+        return new Promise((resolve, reject) => {
+                
+                if (currentPIN == oldPIN && currentPIN != newPIN) {
+                    return resolve(currentCreditCard)
+                }
+          
+            return reject(null)
+        })
     }
 }
 
 class CreditCard {
-    constructor(number, PIN, amount, expireDate, CVV, bankCode, personID){
+    constructor(number, PIN, amount, expireDate, CVV, bankCode, personID) {
         this.number = number
         this.PIN = PIN
         this.amount = amount
@@ -78,7 +103,7 @@ class CreditCard {
 }
 
 class TransactionHistory {
-    constructor(id, creditCardNumberSender,creditCardNumberReceiver, atmCode, time, amount){
+    constructor(id, creditCardNumberSender, creditCardNumberReceiver, atmCode, time, amount) {
         this.id = id
         this.creditCcreditCardNumberSenderardNumber = creditCardNumberSender
         this.creditCardNumberReceiver = creditCardNumberReceiver
@@ -97,15 +122,15 @@ let hung = new Person(3, "Nguyễn Khắc Hùng", "0123456789")
 persons.push(hung)
 
 var banks = []
-let bidv = new Bank("BIDV", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "Cầu Giấy" )
+let bidv = new Bank("BIDV", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "Cầu Giấy")
 banks.push(bidv)
-let tcb = new Bank("TCB", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "Hoàng Cầu" )
+let tcb = new Bank("TCB", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "Hoàng Cầu")
 banks.push(tcb)
-let acb = new Bank("ACB", "Ngân hàng thương mại cổ phần Á Châu", "Xuân Thủy" )
+let acb = new Bank("ACB", "Ngân hàng thương mại cổ phần Á Châu", "Xuân Thủy")
 banks.push(acb)
 
 var atms = []
-let bidvAtmCauGiay = new ATM("BIDV-ATM","Cầu Giấy", "BIDV")
+let bidvAtmCauGiay = new ATM("BIDV-ATM", "Cầu Giấy", "BIDV")
 atms.push(bidvAtmCauGiay)
 let tcbAtmHoangCau = new ATM("TCB-ATM", "Hoàng Cầu", "TCB")
 atms.push(tcbAtmHoangCau)
@@ -113,73 +138,152 @@ let acbAtmXuanThuy = new ATM("ACB-ATM", "Xuân Thủy", "ACB")
 atms.push(acbAtmXuanThuy)
 
 var creditCards = []
-let chuongCard = new CreditCard("123","123456", 5000000,"12/08/2025","222","BIDV",1)
+let chuongCard = new CreditCard("0123456789127", "123456", 5000000, "12/08/2025", "222", "BIDV", 1)
 creditCards.push(chuongCard)
-let nhanCard = new CreditCard("124","123789", 10000000,"01/08/2026","333","TCB",2)
+let nhanCard = new CreditCard("0123456789122", "123789", 10000000, "01/08/2026", "333", "TCB", 2)
 creditCards.push(nhanCard)
-let hungCard  = new CreditCard("125","123654", 15000000,"02/04/2030","444","ACB",3)
+let hungCard = new CreditCard("0123456789121", "123654", 15000000, "02/04/2030", "444", "ACB", 3)
 creditCards.push(hungCard)
 
+
 var transactionHistories = []
-let transactionChuongBIDVCard = new TransactionHistory("001", "123", "BIDV-ATM", "12/07/2020", 4000000)
+let transactionChuongBIDVCard = new TransactionHistory("001", "0123456789127", "BIDV-ATM", "12/07/2020", 4000000)
 transactionHistories.push(transactionChuongBIDVCard)
-let transactionNhanTCBCard = new TransactionHistory("002", "124", "TCB-ATM", "11/02/2020", 6000000)
+let transactionNhanTCBCard = new TransactionHistory("002", "0123456789122", "TCB-ATM", "11/02/2020", 6000000)
 transactionHistories.push(transactionNhanTCBCard)
-let transactionHungACBCard = new TransactionHistory("003", "125", "ACB-ATM", "01/07/2020", 5000000)
+let transactionHungACBCard = new TransactionHistory("003", "0123456789121", "ACB-ATM", "01/07/2020", 5000000)
 transactionHistories.push(transactionHungACBCard)
 
 var currentLoginCardNumber
-var currentReceiveCardNumber
+var currentReceiverCardNumber
+var currentAmount
+var currentPIN
 
-function login(name) {
-    let chosenATMCode = document.getElementById("choseAtmId").value 
+function login() {
+    let chosenATMCode = document.getElementById("choseAtmId").value
     atms.forEach(currentATM => {
-        if(currentATM.code == chosenATMCode) {
+        if (currentATM.code == chosenATMCode) {
+
             let userCardNumber = document.getElementById("cardLogin").value
             let userCardPIN = document.getElementById("PINLogin").value
 
             let isUserCardValid = currentATM.isCardNumberValid(userCardNumber)
             let isUserCardPINValid = currentATM.isPINValid(userCardPIN)
+            if (isUserCardValid && isUserCardPINValid) {
 
-            if (isUserCardValid && isUserCardPINValid){
-                let isLoginSuccess = currentATM.login(creditCards, userCardNumber,userCardPIN)
-                if (isLoginSuccess) {
+                currentATM.login(creditCards, userCardNumber, userCardPIN).then(result => {
+                    console.log("eeeee",result);
                     currentLoginCardNumber = userCardNumber
-                    document.getElementById("cardInfo").innerHTML = "Xin chào" + name 
-                    alert("Đăng nhập thành công!")
-                } else {
-                    alert("Đăng nhập thất bại!")
-                }
-            } else {
+                    currentPIN = result.PIN
+                    persons.forEach(currentPerson => {
+                        if (currentPerson.id == result.personID) {
+                            let currentName = currentPerson.name
+                            currentAmount = result.amount
+
+                            document.getElementById("cardInfo").innerHTML = "Xin chào" + " " + currentName + "!"
+                            document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " + currentAmount
+
+                        }
+                    })
+                }).catch(error => {
+                    alert("Đăng nhập không thành công!")
+                })
+            }
+            else {
                 alert("Thẻ hoặc mã PIN không hợp lệ. Vui lòng thử lại!")
             }
         }
     })
 }
-function transferMoney(amount){
-    if (currentLoginCardNumber != undefined) {
-        let cardReceiver = document.getElementById("receiver").value
-        let amountToSend = document.getElementById("amount").value
+function transferMoney() {
+    let chosenATMCode = document.getElementById("choseAtmId").value
+    atms.forEach(currentATM => {
+        if (currentATM.code == chosenATMCode) {
 
-        let isCardReceiverValid = isCardNumberReceiverValid(cardReceiver)
-        let isAmoutToSendValid = isAmoutValid(amountToSend)
+            if (currentLoginCardNumber != undefined) {
+                let cardReceiver = document.getElementById("receiver").value
+                let amountToSend = document.getElementById("amountToSend").value
 
-        if(isCardReceiverValid && isAmoutToSendValid) {
-            let isLoginSuccess = transferMoney(cardReceiver, amountToSend)
-            if (isLoginSuccess) {
-                currentReceiveCardNumber = cardReceiver
-                if (amountToSend <= amount ){
-                    alert("Giao dịch thành công!")   
-                }  else  {
-                    alert("Tài khoản của bạn không đủ để thực hiện giao dịch này!")
+                let isCardReceiverValid = currentATM.isCardNumberReceiverValid(cardReceiver)
+                let isAmoutToSendValid = currentATM.isAmountValid(amountToSend)
+                console.log("ketqua", isCardReceiverValid, isAmoutToSendValid)
+
+                if (isCardReceiverValid && isAmoutToSendValid) {
+                    console.log("truoc");
+                    currentATM.tranferMoney(creditCards, cardReceiver, amountToSend).then(resultTranfer => {
+                        console.log("Sau");
+                        currentReceiverCardNumber = cardReceiver
+                        alert("Giao dịch thành công!")
+                        currentAmount = currentAmount - amountToSend
+                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " +  currentAmount
+
+                    }).catch(errorTranfer => {
+                        alert("Tài khoản của bạn không đủ để thực hiện giao dịch này!")
+                    })
+                    // var transaction = new TransactionHistory()
+                    // transationHistories.push(transaction)
+                } else {
+                    alert("Giao dịch không thành công!")
                 }
-                transationHistories.push(transaction)
-            } 
-        } else {
-            alert("Giao dịch thất bại!")   
+            }
         }
-    }
+    })
 }
 function widthDrawMoney() {
-    
+    let chosenATMCode = document.getElementById("choseAtmId").value
+    atms.forEach(currentATM => {
+        if (currentATM.code == chosenATMCode) {
+            console.log("ATM", currentATM);
+            if (currentLoginCardNumber != undefined) {
+                let amountToWidthDraw = document.getElementById("amountToWeithDraw").value
+                let pin = document.getElementById("pin").value
+
+                let isAmountToWidthDrawValid = currentATM.isAmountValid(amountToWidthDraw)
+                let isPINValid = currentATM.isPINValid(pin)
+               
+                if (isAmountToWidthDrawValid && isPINValid) {
+                   
+                    currentATM.widthDrawMoney( pin, amountToWidthDraw).then(resultWidthDraw => {
+                        alert("Rút tiền thành công!")
+                        currentAmount = currentAmount - amountToWidthDraw
+                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " +  currentAmount
+                       
+                    }).catch(err => {
+                        alert("Tài khoản của bạn không đủ!")
+                    })
+                } else {
+                    alert("Rút tiền không thành công")
+                }
+
+            }
+        }
+    })
+}
+function changePIN() {
+    let chosenATMCode = document.getElementById("choseAtmId").value
+    atms.forEach(currentATM => {
+        if (currentATM.code == chosenATMCode) {
+            if (currentLoginCardNumber != undefined) {
+                let oldPinValid = document.getElementById("oldPin")
+                let newPinValid = document.getElementById("newPin")
+                let reNewPinValid = document.getElementById("reNewPin")
+
+                let isOldPinValid = currentATM.isPINValid(oldPinValid)
+                let isNewPinValid = currentATM.isPINValid(newPinValid)
+                let isReNewPinValid = currentATM.isPINValid(reNewPinValid)
+                console.log("doi pin",isOldPinValid,isNewPinValid,isReNewPinValid);
+
+                if (isOldPinValid, isNewPinValid, isReNewPinValid) {
+                    currentATM.changePIN(cardNumber, oldIN, newPIN).then(resultPin => {
+                        currentPIN = newPIN
+                        alert("Đổi mã pin thành công!")
+                    }).catch(errorPin => {
+                        alert("Mã PIN mới không được trùng với mã PIN hiện tại")
+                    })
+                } else {
+                    alert("Đổi mã pin không thành công!")
+                }
+            }
+        }
+    })
 }

@@ -11,29 +11,29 @@
         <input placeholder="Chọn cây ATM" id="choseAtmId" type="text"/>
         <h1> Cây ATM </h1>
             <input type="text" id="cardLogin" placeholder="Nhập số thẻ"/>
-            <input type="text" id="PINlogin" placeholder="Nhập mã PIN"/>
+            <input type="text" id="PINLogin" placeholder="Nhập mã PIN"/>
         <br>
         <br>
             <span id="cardInfo" class="dntc"></span>
             <!-- <span id="mathe" class="mathe"></span>
             <span id="mapin" class="mapin"></span> -->
              <p id="tenThe"></p> 
-            Số tiền:  <p id="soTien"></p>
-        <button onclick="dangNhap()">Đăng nhập</button>
+            <p id="amount"></p>
+        <button onclick="login()">Đăng nhập</button>
         <h1> Các tính năng của cây ATM</h1>
         <h3>1. Chuyển tiền</h3>
-            <input type="text" id="amount" placeholder="Số tiền muốn chuyển"/>
+            <input type="text" id="amountToSend" placeholder="Số tiền muốn chuyển"/>
             <input type="text" id="receiver"  placeholder="Tài khoản muốn chuyển"/>
-            <button onclick="">Chuyển tiền</button>
+            <button onclick="transferMoney()">Chuyển tiền</button>
         <h3>2. Rút tiền</h3>
-            <input type="text" placeholder="Số tiền muốn rút"/>
-            <input type="text" placeholder="Nhập mã PIN"/>
-            <button onclick="">Rút tiền </button>
+            <input type="text" id="amountToWeithDraw" placeholder="Số tiền muốn rút"/>
+            <input type="text" id="pin" placeholder="Nhập mã PIN"/>
+            <button onclick="widthDrawMoney() ">Rút tiền </button>
         <h3>3. Đổi mã PIN</h3>
-            <input type="text" placeholder="Mã PIN cũ"/>
-            <input type="text" placeholder="Mã PIN mới"/>
-            <input type="text" placeholder="Nhập lại mã PIN mới"/>
-            <button onclick="">Đổi mã PIN</button>
+            <input type="text" id="oldPin" placeholder="Mã PIN cũ"/>
+            <input type="text" id="newPin" placeholder="Mã PIN mới"/>
+            <input type="text" id="reNewPin" placeholder="Nhập lại mã PIN mới"/>
+            <button onclick="changePIN()">Đổi mã PIN</button>
         <h3>4. Lịch sử giao dịch</h3>
             <table>
                 <tr>
