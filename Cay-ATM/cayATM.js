@@ -45,10 +45,8 @@ class ATM {
     tranferMoney(creditCards, cardNumberReceiver, amountToSend) {
         return new Promise((resolve, reject) => {
             creditCards.forEach(currentReceiverCreditCard => {
-                console.log("ngoai ham");
                 if (currentReceiverCreditCard.number == cardNumberReceiver && amountToSend <= currentAmount) {
-                    console.log("trong ham");
-                    return resolve(true)
+                    return resolve(currentReceiverCreditCard)
                 }
             })
             return reject(null)
@@ -71,21 +69,53 @@ class ATM {
     widthDrawMoney(pin, amountToWidthDraw) {
         return new Promise((resolve, reject) => {
             if (pin == currentPIN && amountToWidthDraw <= currentAmount) {
-                console.log("tien hien tai", currentAmount);
                 return resolve(true)
             }
             return reject(null)
         })
     }
 
-    changePIN(oldPIN, newPIN) {
+    changePIN(oldPin, newPin) {
         return new Promise((resolve, reject) => {
-            if (currentPIN == oldPIN && currentPIN != newPIN) {
+            if (oldPin == currentPIN && newPin != currentPIN) {
                 return resolve(true)
             }
             return reject(null)
         })
     }
+    tranferHistories(type) {
+        var time = new Date().toLocaleTimeString()
+        var newTranferObject = new TransactionHistory(currentReceiveName, currentaddressATM, time, amountToSend, amountToWidthDraw, type)
+        transactionHistories = transactionHistories.concat(
+            newTranferObject
+        )
+        let tableContent =
+            `<tr>
+                <th>STT</th>
+                <th>Số tiền giao dịch</th>
+                <th>Loại giao dịch</th>
+                <th>Người nhận</th>
+                <th>Thời gian</th>
+                <th>Nơi thực hiện</th>    
+            </tr>`
+        transactionHistories.forEach((transaction, si) => {
+            let isTransfer = transaction.type == 'transfer';
+
+            si++;
+            tableContent +=
+                `<tr>
+                    <td>${si}</td>
+                    <td>${isTransfer ? transaction.amountToSend : transaction.amountToWidthDraw}</td>
+                    <td>${isTransfer ? 'Chuyển tiền ' : 'Rút tiền'}</td>
+                    <td>${isTransfer ? transaction.currentReceiveName : ""}</td>
+                    <td>${transaction.time}</td>
+                    <td>${transaction.currentaddressATM}</td>
+                </tr>`
+        })
+        document.getElementById("my-table").innerHTML = tableContent;
+
+    }
+
 }
 
 class CreditCard {
@@ -101,14 +131,15 @@ class CreditCard {
 }
 
 class TransactionHistory {
-    constructor(id, creditCardNumberSender, creditCardNumberReceiver, atmCode, time, amount) {
-        this.id = id
-        this.creditCcreditCardNumberSenderardNumber = creditCardNumberSender
-        this.creditCardNumberReceiver = creditCardNumberReceiver
-        this.atmCode = atmCode
+    constructor(currentReceiveName, currentaddressATM, time, amountToSend, amountToWidthDraw, type) {
+        this.currentReceiveName = currentReceiveName
+        this.currentaddressATM = currentaddressATM
         this.time = time
-        this.amount = amount
+        this.amountToSend = amountToSend
+        this.amountToWidthDraw = amountToWidthDraw
+        this.type = type
     }
+
 }
 
 var persons = []
@@ -120,19 +151,19 @@ let hung = new Person(3, "Nguyễn Khắc Hùng", "0123456789")
 persons.push(hung)
 
 var banks = []
-let bidv = new Bank("BIDV", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "Cầu Giấy")
+let bidv = new Bank("BIDV", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "ATM-Cầu Giấy")
 banks.push(bidv)
-let tcb = new Bank("TCB", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "Hoàng Cầu")
+let tcb = new Bank("TCB", "Ngân hàng Thương mại cổ phần Đầu tư và Phát triển Việt Nam", "ATM-Hoàng Cầu")
 banks.push(tcb)
-let acb = new Bank("ACB", "Ngân hàng thương mại cổ phần Á Châu", "Xuân Thủy")
+let acb = new Bank("ACB", "Ngân hàng thương mại cổ phần Á Châu", "ATM-Xuân Thủy")
 banks.push(acb)
 
 var atms = []
-let bidvAtmCauGiay = new ATM("BIDV-ATM", "Cầu Giấy", "BIDV")
+let bidvAtmCauGiay = new ATM("BIDV-ATM", "ATM-Cầu Giấy", "BIDV")
 atms.push(bidvAtmCauGiay)
-let tcbAtmHoangCau = new ATM("TCB-ATM", "Hoàng Cầu", "TCB")
+let tcbAtmHoangCau = new ATM("TCB-ATM", "ATM-Hoàng Cầu", "TCB")
 atms.push(tcbAtmHoangCau)
-let acbAtmXuanThuy = new ATM("ACB-ATM", "Xuân Thủy", "ACB")
+let acbAtmXuanThuy = new ATM("ACB-ATM", "ATM-Xuân Thủy", "ACB")
 atms.push(acbAtmXuanThuy)
 
 var creditCards = []
@@ -145,23 +176,25 @@ creditCards.push(hungCard)
 
 
 var transactionHistories = []
-let transactionChuongBIDVCard = new TransactionHistory("001", "0123456789127", "BIDV-ATM", "12/07/2020", 4000000)
-transactionHistories.push(transactionChuongBIDVCard)
-let transactionNhanTCBCard = new TransactionHistory("002", "0123456789122", "TCB-ATM", "11/02/2020", 6000000)
-transactionHistories.push(transactionNhanTCBCard)
-let transactionHungACBCard = new TransactionHistory("003", "0123456789121", "ACB-ATM", "01/07/2020", 5000000)
-transactionHistories.push(transactionHungACBCard)
+
 
 var currentLoginCardNumber
 var currentReceiverCardNumber
 var currentAmount
 var currentPIN
+var amountToSend = 0
+var amountToWidthDraw = 0
+var currentReceiveName
+var currentaddressATM
+var chosenATMCode
+
+
 
 function login() {
     let chosenATMCode = document.getElementById("choseAtmId").value
     atms.forEach(currentATM => {
         if (currentATM.code == chosenATMCode) {
-
+            currentaddressATM = currentATM.address
             let userCardNumber = document.getElementById("cardLogin").value
             let userCardPIN = document.getElementById("PINLogin").value
 
@@ -170,7 +203,6 @@ function login() {
             if (isUserCardValid && isUserCardPINValid) {
 
                 currentATM.login(creditCards, userCardNumber, userCardPIN).then(result => {
-                    console.log("eeeee", result);
                     currentLoginCardNumber = userCardNumber
                     currentPIN = result.PIN
                     persons.forEach(currentPerson => {
@@ -179,7 +211,7 @@ function login() {
                             currentAmount = result.amount
 
                             document.getElementById("cardInfo").innerHTML = "Xin chào" + " " + currentName + "!"
-                            document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " + currentAmount
+                            document.getElementById("amount").innerHTML = "Số dư tài khoản của bạn là:" + " " + ":" + " " + currentAmount + "VNĐ"
 
                         }
                     })
@@ -194,32 +226,35 @@ function login() {
     })
 }
 function transferMoney() {
-    let chosenATMCode = document.getElementById("choseAtmId").value
+    chosenATMCode = document.getElementById("choseAtmId").value
     atms.forEach(currentATM => {
         if (currentATM.code == chosenATMCode) {
-
+            currentaddressATM = currentATM.address
             if (currentLoginCardNumber != undefined) {
                 let cardReceiver = document.getElementById("receiver").value
-                let amountToSend = document.getElementById("amountToSend").value
+                amountToSend = document.getElementById("amountToSend").value
 
                 let isCardReceiverValid = currentATM.isCardNumberReceiverValid(cardReceiver)
                 let isAmoutToSendValid = currentATM.isAmountValid(amountToSend)
-                console.log("ketqua", isCardReceiverValid, isAmoutToSendValid)
+
 
                 if (isCardReceiverValid && isAmoutToSendValid) {
-                    console.log("truoc");
                     currentATM.tranferMoney(creditCards, cardReceiver, amountToSend).then(resultTranfer => {
-                        console.log("Sau");
                         currentReceiverCardNumber = cardReceiver
                         alert("Giao dịch thành công!")
                         currentAmount = currentAmount - amountToSend
-                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " + currentAmount
+                        document.getElementById("amount").innerHTML = "Số dư tài khoản của bạn là:" + " " + ":" + " " + currentAmount + "VNĐ"
+                        persons.forEach(currentReceivePerson => {
+                            if (currentReceivePerson.id == resultTranfer.personID) {
+                                currentReceiveName = currentReceivePerson.name
+                            }
+                        })
+                        currentATM.tranferHistories('transfer')
 
-                    }).catch(errorTranfer => {
+                    })
+                    .catch(errorTranfer => {
                         alert("Tài khoản của bạn không đủ để thực hiện giao dịch này!")
                     })
-                    // var transaction = new TransactionHistory()
-                    // transationHistories.push(transaction)
                 } else {
                     alert("Giao dịch không thành công!")
                 }
@@ -231,9 +266,9 @@ function widthDrawMoney() {
     let chosenATMCode = document.getElementById("choseAtmId").value
     atms.forEach(currentATM => {
         if (currentATM.code == chosenATMCode) {
-            console.log("ATM", currentATM);
+            currentaddressATM = currentATM.address
             if (currentLoginCardNumber != undefined) {
-                let amountToWidthDraw = document.getElementById("amountToWeithDraw").value
+                amountToWidthDraw = document.getElementById("amountToWithDraw").value
                 let pin = document.getElementById("pin").value
 
                 let isAmountToWidthDrawValid = currentATM.isAmountValid(amountToWidthDraw)
@@ -244,8 +279,8 @@ function widthDrawMoney() {
                     currentATM.widthDrawMoney(pin, amountToWidthDraw).then(resultWidthDraw => {
                         alert("Rút tiền thành công!")
                         currentAmount = currentAmount - amountToWidthDraw
-                        document.getElementById("amount").innerHTML = "Số tiền" + " " + ":" + " " + currentAmount
-
+                        document.getElementById("amount").innerHTML = "Số dư tài khoản của bạn là:" + " " + ":" + " " + currentAmount + "VNĐ"
+                        currentATM.tranferHistories('withDraw')
                     }).catch(err => {
                         alert("Tài khoản của bạn không đủ!")
                     })
@@ -262,19 +297,20 @@ function changePIN() {
     atms.forEach(currentATM => {
         if (currentATM.code == chosenATMCode) {
             if (currentLoginCardNumber != undefined) {
-                let oldPin = document.getElementById("oldPin")
-                let newPin = document.getElementById("newPin")
-                let reNewPin = document.getElementById("reNewPin")
+                let oldPin = document.getElementById("oldPin").value
+                let newPin = document.getElementById("newPin").value
+                let reNewPin = document.getElementById("reNewPin").value
 
-                // let isOldPinValid = currentATM.isPINValid(oldPin)
+                let isOldPinValid = currentATM.isPINValid(oldPin)
                 let isNewPinValid = currentATM.isPINValid(newPin)
                 let isReNewPinValid = currentATM.isPINValid(reNewPin)
-                console.log("doi pin", oldPin, isNewPinValid, isReNewPinValid);
 
-                if (oldPin, isNewPinValid, isReNewPinValid) {
-                    currentATM.changePIN(oldPIN, newPIN).then(resultPin => {
-                        currentPIN = newPIN
+                if (isOldPinValid && isNewPinValid && isReNewPinValid) {
+                    currentATM.changePIN(oldPin, newPin).then(() => {
+                        currentPIN = newPin
                         alert("Đổi mã pin thành công!")
+
+
                     }).catch(errorPin => {
                         alert("Mã PIN mới không được trùng với mã PIN hiện tại")
                     })
@@ -284,4 +320,10 @@ function changePIN() {
             }
         }
     })
+}
+function fill() {
+    document.getElementById("choseAtmId").defaultValue = "TCB-ATM"
+    document.getElementById("cardLogin").defaultValue = "0123456789122"
+    document.getElementById("PINLogin").defaultValue = "123789"
+
 }
