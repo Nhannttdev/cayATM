@@ -25,4 +25,15 @@ td {
 }
 .dntc{
     color:blue;
+    font-size: 25px;
+}
+body{
+    padding-left: 200px;
+    padding-right: 200px;
+}
+.beforeLogin{
+    text-align: center;
+}
+#tinh-nang{
+    text-align: center;
 }

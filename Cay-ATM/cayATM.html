@@ -12,17 +12,20 @@
             <input placeholder="Chọn cây ATM" id="choseAtmId" type="text" />
             <button onclick="fill()">Fill</button>
             <h1> Cây ATM </h1>
+                
                 <input type="text" id="cardLogin" placeholder="Nhập số thẻ" />
                 <input type="text" id="PINLogin" placeholder="Nhập mã PIN"/>
             <br>
             <br>
-                <span id="cardInfo" class="dntc"></span>
+                <button onclick="login()">Đăng nhập</button>
+                <br>
+                <br>
+                <span id="cardInfo" class="dntc"></span>                
                 <p id="tenThe"></p> 
                 <p id="amount"></p>
-            <button onclick="login()">Đăng nhập</button>
         </div>
         <div class="afterLogin">
-                <h1> Các tính năng của cây ATM</h1>
+                <h2 id="tinh-nang"> Các tính năng của ATM</h2>
             <h3>1. Chuyển tiền</h3>
                 <input type="text" id="amountToSend" placeholder="Số tiền muốn chuyển"/>
                 <input type="text" id="receiver"  placeholder="Tài khoản muốn chuyển"/>
